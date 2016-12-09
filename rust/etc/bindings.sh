@@ -1,19 +1,11 @@
 #!/bin/bash
 
-#!/bin/bash
-
 cd "$(dirname "$0")"
 
 EXTRA_FLAGS=
 EXTRA_CLANG_FLAGS=
-if [[ "$1" == "msvc14" ]] ; then
-    EXTRA_CLANG_FLAGS="--target=x86_64-pc-win32 -DWIN32=1"
-    EXTRA_CLANG_FLAGS="$EXTRA_CLANG_FLAGS -fms-compatibility-version=19.00"
-    EXTRA_CLANG_FLAGS="$EXTRA_CLANG_FLAGS -DEXPORT_JS_API=1 -D_CRT_USE_BUILTIN_OFFSETOF"
-    EXTRA_CLANG_FLAGS="$EXTRA_CLANG_FLAGS -fvisibility=hidden"
-fi
 
-: ${BINDGEN:=../../../../r/rust-bindgen/target/debug/bindgen}
+: ${BINDGEN:=/home/emilio/projects/moz/rust-bindgen/target/debug/bindgen}
 
 if [[ ! -x "$BINDGEN" ]]; then
     echo "error: BINDGEN does not exist or isn't executable!"
@@ -40,25 +32,29 @@ WHITELISTED_FN_REGEX=(
 )
 
 BLACKLISTED_TYPES=(
+    'std::unique_ptr__Pointer_type'
+    'std::unique_ptr___tuple_type'
+    'std::tuple_Inherited'
     'is_bitmask_enum'
 )
-
 
 $BINDGEN \
   ${EXTRA_FLAGS} \
   ${BLACKLISTED_TYPES[@]/#/--blacklist-type } \
   ${WHITELISTED_TYPES[@]/#/--whitelist-type } \
   ${WHITELISTED_FN_REGEX[@]/#/--whitelist-function } \
+  --enable-cxx-namespaces \
+  --raw-line 'pub use self::root::*;' \
   --bitfield-enum 'Gr.*Flags' \
   --bitfield-enum 'Sk.*Flags' \
   -o skia_bind.rs \
-  skia_includes.h \
+  skia_includes.hpp \
   -- \
-  ${EXTRA_CLANG_FLAGS} \
-  -DRUST_BINDGEN=1 \
-  -x c++ --std=c++11 \
+  --std=c++11 \
   -I ../../include \
   -I ../../include/config \
+  -I ../../include/core \
+  ${EXTRA_CLANG_FLAGS} \
 || exit 1
 
 echo

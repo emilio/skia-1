@@ -1,11 +1,21 @@
+/// <div rustbindgen replaces="std::unique_ptr"></div>
+template<typename T, typename D>
+class unique_ptr_replacement {
+  T* ptr;
+};
+
+#include "core/SkImage.h"
+#include "core/SkCanvas.h"
+#include "core/SkSurface.h"
+
+#if 0
 #include "core/SkAnnotation.h"
 #include "core/SkBBHFactory.h"
 #include "core/SkBitmap.h"
 #include "core/SkBitmapDevice.h"
 #include "core/SkBlitRow.h"
 #include "core/SkBlurTypes.h"
-#include "core/SkCanvas.h"
-#include "core/SkChunkAlloc.h"
+#include "private/SkChunkAlloc.h"
 #include "core/SkClipStack.h"
 #include "core/SkColor.h"
 #include "core/SkColorFilter.h"
@@ -20,16 +30,13 @@
 #include "core/SkDrawFilter.h"
 #include "core/SkDrawLooper.h"
 #include "core/SkDrawable.h"
-#include "core/SkError.h"
 #include "core/SkFilterQuality.h"
 #include "core/SkFlattenable.h"
 #include "core/SkFlattenableSerialization.h"
 #include "core/SkFont.h"
-#include "core/SkFontHost.h"
 #include "core/SkFontLCDConfig.h"
 #include "core/SkFontStyle.h"
 #include "core/SkGraphics.h"
-#include "core/SkImage.h"
 #include "core/SkImageEncoder.h"
 #include "core/SkImageFilter.h"
 #include "core/SkImageGenerator.h"
@@ -71,7 +78,6 @@
 #include "core/SkStream.h"
 #include "core/SkString.h"
 #include "core/SkStrokeRec.h"
-#include "core/SkSurface.h"
 #include "core/SkSurfaceProps.h"
 #include "core/SkSwizzle.h"
 #include "core/SkTLazy.h"
@@ -84,5 +90,5 @@
 #include "core/SkUnPreMultiply.h"
 #include "core/SkWriteBuffer.h"
 #include "core/SkWriter32.h"
-#include "core/SkXfermode.h"
 #include "core/SkYUVSizeInfo.h"
+#endif
